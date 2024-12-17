@@ -1,7 +1,7 @@
-#comentarios # son explicaciones, comentarios """  """ son ideas o pasos por realizar. 
+import random
 
 #lista con todos los estados del ahorcado. se seleccionara con el indice de intentos para mostrar en la interfaz.
-Estado_ahorcado=[
+Estado_ahorcado=[ 
       "-------\n |  |\n    |\n    |\n    |\n    |\n========= ",
       "-------\n |  |\n O  |\n    |\n    |\n    |\n========= ",
       "-------\n |  |\n O  |\n |  |\n    |\n    |\n========= ",
@@ -10,21 +10,11 @@ Estado_ahorcado=[
       "-------\n |  |\n O  |\n/|\ |\n/   |\n    |\n========= ",
       "-------\n |  |\n O  |\n/|\ |\n/ \ |\n    |\n========= ",]
 
-
 #punto 2 c funcion seleccionar palabra*****
 
-#aca estamos recibiendo el argumento que contiene toda la lista de palabras. 
 def seleccionar_palabra(lista_palabras):
-
-    """ Esto es solo para prueba, lo que se requiere es variar el indice la la lista de palabras para asi siempre retornar una palabra diferente o buscar alguna forma de hacer un return aleatorio. """
-    '''
-    esto funcionaría si la lista variara de tamaño
-    tal vez agarrar el largo del nombre como "seed" y hacer una formula equis con eso, y luego hacer el % total_palabras para asegurarnos de que
-    siempre quede dentro del tamaño de la lista?
-    '''
-
     total_palabras = len(lista_palabras)
-    indice = (7 * total_palabras + 3) % total_palabras  # pseudoaleatoria
+    indice = random.randint(0, total_palabras - 1)  # aleatorio, pero siempre queda dentro de la lista
     return lista_palabras[indice]
 
 #lo del dibujo
@@ -59,21 +49,20 @@ def verificar_fin_del_juego(estado, intentos_restantes, palabra):
         return True
     if intentos_restantes <= 0:
         #se le acabaron los intetos al jugador, entonces pierde
+        print(Estado_ahorcado[6])  #imprimir el muñeco ahorcado cuando se pierde
         print("perdiste, la palabra era", palabra)
         return True
     return False
 
-
 #declaramos la funcion para dar inicio al juego al seleccionarse la opción a.
 def iniciarJuego():
-    
     #se declara una variable donde se guardaran los datos del return y se ejecuta la funcion cargar_palabras() como argumento a esta funcion enviamos el archivo palabras.txt que esta en la raiz de la carpeta del programa.
     lista_palabras=cargar_palabras("palabras.txt")
 
     #recibimos el nombre del jugador.
     player=input("\nIngrese su nombre: \n")
 
-    print("!Hola ",player," bienvenido al juego de ahorcado!\n")
+    print("¡Hola ",player," bienvenido/a al juego de ahorcado!\n")
 
     palabra = seleccionar_palabra(lista_palabras)
     estado = ["_" for _ in palabra]
@@ -83,17 +72,17 @@ def iniciarJuego():
     while True:
         print("\nEstado actual: ", " ".join(estado))
         mostrar_ahorcado(intentos_restantes)
+        print("Intentos restantes:", intentos_restantes)
         intentos_restantes = manejar_turno(palabra, estado, letras_adivinadas, intentos_restantes)
         if verificar_fin_del_juego(estado, intentos_restantes, palabra):
             break
 
-
 #punto 2 b*************************************************************************
 #Se define la funcion cargar palabras
 def cargar_palabras(archivo):
-    #se declara la lista donde se almacenaran las palabras que existen en el archivo.txt
+    #se declara la lista donde se almacenaran las palabras que existen en el archivo txt
     palabras=[]
-    #Se utiliza with open para abrir el archivo y asegurarse que se cerrara luego de usarse.
+    #se usa with open para abrir el archivo y asegurarse que se cerrara luego de usarse.
     #para abrir un documento existen diferentes formas de hacerlo, utilizaremos el modo r (solo lectura (read)) y lo llamaremos "archivo"
     with open(archivo, 'r') as archivo:
         #en este ciclo para cada palabra dentro del archivo vamos a hacer un append a la lista utilizando strip ya que las palabras del archivo estan separadas por saltos de linea. 
@@ -101,7 +90,6 @@ def cargar_palabras(archivo):
             palabras.append(palabra.strip().upper())
     #return es el valor que nos retornara al finalizar la funcion, en este caso la lista "palabras[]"
     return palabras
-
 
 #declaramos la funcion menu con el ciclo para el menu.
 def menu():
