@@ -47,10 +47,11 @@ def verificar_fin_del_juego(estado, intentos_restantes, palabra):
     if "_" not in estado:
         print("felicidades, adivinaste que la palabra era", "".join(estado))
         return True
-    if intentos_restantes <= 0:
+    if intentos_restantes == 0:
         #se le acabaron los intetos al jugador, entonces pierde
-        print(Estado_ahorcado[6])  #imprimir el muñeco ahorcado cuando se pierde
-        print("perdiste, la palabra era", palabra)
+        print("Intentos restantes:", intentos_restantes)
+        print(Estado_ahorcado[6])  #imprimir el muñeco ahorcado cuando se pierde    
+        print("perdiste, la palabra era", palabra,"\n")
         return True
     return False
 
