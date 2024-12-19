@@ -17,6 +17,22 @@ def seleccionar_palabra(lista_palabras):
     indice = random.randint(0, total_palabras - 1)  # aleatorio, pero siempre queda dentro de la lista
     return lista_palabras[indice]
 
+
+# esta funcion es para preguntar al usuario una vez finalizada la partida si desea continuar o cerrar el juego. se realiza validacion solo acepta S o N 
+
+def preguntar_continuar():
+    while True:
+
+        jugar=input("Desea volver a jugar? S/N\n").upper
+        if jugar== "S":
+            return True
+        if jugar =="N":
+            print("fin del juego")
+            return False
+        else: print("Ingrese S para seguir jugando o N para salir. \n")
+    
+
+
 #lo del dibujo
 def mostrar_ahorcado(intentos_restantes):
     print(Estado_ahorcado[6 - intentos_restantes])
@@ -24,11 +40,11 @@ def mostrar_ahorcado(intentos_restantes):
 #se ingresa una letra y si es valida se actualiza el estado dependiendo de si está o no está.
 def manejar_turno(palabra, estado, letras_adivinadas, intentos_restantes):
     letra = input("\nadivina una letra: ").upper()
-    #se utiliza isalpha para realizar validacion del ingreso de caracteres.
+
     #evaluar si colocamos una regex para validar alfabeto.
 
     #validacion de cantidad de letras ingresadas por el usuario. 
-    if len(letra) != 1 or not letra.isalpha():
+    if len(letra) != 1 :
         print("solo puedes ingresar una sola letra a la vez, vuelve a intentarlo\n")
         return intentos_restantes
     
@@ -55,25 +71,21 @@ def verificar_fin_del_juego(estado, intentos_restantes, palabra):
     #como ya no hay espacios, quiere decir que la palabra está completa
     if "_" not in estado:
         print("Felicidades, adivinaste que la palabra era", "".join(estado),"\n")
-        jugar=input("Desea volver a jugar? S/N")
+      
         
-        if jugar== "S":
-            return True
-        else:
-            print("fin del juego")
+        jugar=preguntar_continuar()
+        return jugar 
+
     if intentos_restantes == 0:
         #se le acabaron los intetos al jugador, entonces pierde
         print("Intentos restantes:", intentos_restantes)
         print(Estado_ahorcado[6])  #imprimir el muñeco ahorcado cuando se pierde    
         print("Perdiste, la palabra era", palabra,"\n")
-        jugar=input("Desea volver a jugar? S/N")
         
-        if jugar== "S":
-            return True
-        else:
-            print("fin del juego")
+        jugar=preguntar_continuar()
+        return jugar 
       
-    return False
+    return None
 
 #declaramos la funcion para dar inicio al juego al seleccionarse la opción a.
 def iniciarJuego():
@@ -98,8 +110,12 @@ def iniciarJuego():
         print("\nPalabra a adivinar: ", " ".join(estado))
        
         intentos_restantes = manejar_turno(palabra, estado, letras_adivinadas, intentos_restantes)
-        if verificar_fin_del_juego(estado, intentos_restantes, palabra):
-            break
+
+        jugar=verificar_fin_del_juego(estado, intentos_restantes, palabra)
+
+
+        if jugar is not None:
+            return jugar
 
 #punto 2 b*************************************************************************
 #Se define la funcion cargar palabras
@@ -118,31 +134,13 @@ def cargar_palabras(archivo):
     #return es el valor que nos retornara al finalizar la funcion, en este caso la lista "palabras[]"
     return palabras
 
-"""  # Lista para almacenar palabras
-    palabras = []
-    archivo_existe = False
 
-    # Intentamos abrir el archivo en modo lectura para verificar si existe
-    try:
-        with open(archivo, 'r') as archivo_lectura:
-            archivo_existe = True
-            # Leer palabras del archivo
-            for palabra in archivo_lectura:
-                palabras.append(palabra.strip().upper())
-    except OSError:
-        # Si no existe, creamos el archivo con palabras predeterminadas
-        with open(archivo, 'w') as archivo_escritura:
-            palabras_default = ["PYTHON", "JUEGO", "AHORCADO", "PROGRAMA"]
-            for palabra in palabras_default:
-                archivo_escritura.write(palabra + '\n')
-            palabras = palabras_default
-
-    return palabras """
 
 #declaramos la funcion menu con el ciclo para el menu.
 def menu():
+    jugar=True
 
-    while True:
+    while jugar:
         print("\nMenu principal")
         print("a: Jugar")
         print("b. Salir")
@@ -151,10 +149,12 @@ def menu():
 
     #utilizamos lower para validar la letra incluso si fue escrita en mayuscula
         if opcionMenu.lower() == "a":
-            iniciarJuego()
+            jugar=iniciarJuego()
+            
 
         elif opcionMenu.lower() == "b":
-            break
+            jugar=False
+            return False
     # si el valor ingresado no es valido se reintentara devolviendo a la opcion de ingresar un nuevo input par ala opcionMenu.
         else:
             print("\nNo ha seleccionado una opción valida")
