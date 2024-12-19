@@ -19,17 +19,17 @@ def seleccionar_palabra(lista_palabras):
 
 
 # esta funcion es para preguntar al usuario una vez finalizada la partida si desea continuar o cerrar el juego. se realiza validacion solo acepta S o N 
-
 def preguntar_continuar():
     while True:
-
-        jugar=input("Desea volver a jugar? S/N\n").upper
-        if jugar== "S":
+        jugar = input("¿Desea volver a jugar? S/N\n").upper()
+        if jugar == "S":
             return True
-        if jugar =="N":
-            print("fin del juego")
+        elif jugar == "N":
+            print("Fin del juego")
             return False
-        else: print("Ingrese S para seguir jugando o N para salir. \n")
+        else:
+            print("Ingrese S para seguir jugando o N para salir.\n")
+
 
 #lo del dibujo
 def mostrar_ahorcado(intentos_restantes):
