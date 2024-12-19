@@ -30,8 +30,6 @@ def preguntar_continuar():
             print("fin del juego")
             return False
         else: print("Ingrese S para seguir jugando o N para salir. \n")
-    
-
 
 #lo del dibujo
 def mostrar_ahorcado(intentos_restantes):
@@ -56,6 +54,7 @@ def manejar_turno(palabra, estado, letras_adivinadas, intentos_restantes):
     #almacenamos la letra ingresada en una lista.
     letras_adivinadas.append(letra)
 
+    #recorremos la palabra a adivinar para validar si la letra esta dentro de la palabra y de ser asi se cambia el estado del ahorcado en base al indice, si es incorrecto se resta uno de los intentos. 
     if letra in palabra:
         for i in range(len(palabra)):
             if palabra[i] == letra:
